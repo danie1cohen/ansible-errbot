@@ -1,0 +1,13 @@
+---
+# handlers file for errbot
+
+- name: Check errbot config
+  shell: "{{ virtualenv }}/bin/python -m py_compile {{ errbot_root }}/config.py"
+
+- name: Check upstart config
+  shell: init-checkconf /etc/init/errbot.conf
+  become: yes
+
+- name: Restart errbot
+  service: name=errbot state=restarted
+  become: yes

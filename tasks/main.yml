@@ -1,0 +1,36 @@
+---
+# tasks file for errbot
+- name: Install errbot
+  pip: name=errbot state=present executable={{ virtualenv_pip }}
+
+- name: Create errbot directories
+  file: path={{ item }} state=directory
+        owner={{ errbot_user }} group={{ errbot_user }} mode=0775
+  become: yes
+  with_items: "{{ errbot_directories }}"
+
+- name: Intitalize errbot
+  shell: cmd="cd {{ errbot_root }} && {{ errbot_exec }} --init "
+         creates={{ errbot_root }}/config.py
+
+- include_vars: backend_{{ errbot_backend }}.yml
+  ignore_errors: yes
+
+- name: install extra dependencies
+  pip: name={{ item }} state=present executable={{ virtualenv_pip }}
+  with_items: "{{ errbot_extra_deps }}"
+  notify:
+    - Restart errbot
+
+- name: Update errbot config
+  template: src=templates/config.py.j2 dest={{ errbot_root }}/config.py
+  notify:
+    - Check errbot config
+    - Restart errbot
+
+- name: Create upstart script
+  template: src=templates/upstart.conf.j2 dest=/etc/init/errbot.conf
+  become: yes
+  notify:
+    - Check upstart config
+    - Restart errbot

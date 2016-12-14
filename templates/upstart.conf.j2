@@ -1,0 +1,11 @@
+# This manages the errbot daemon
+
+description "Errbot daemon"
+
+start on started networking
+stop on (deconfiguring-networking or runlevel [016])
+
+# respawn
+# respawn limit 5 30
+
+exec {{ errbot_exec }} -c {{ errbot_root }}/config.py

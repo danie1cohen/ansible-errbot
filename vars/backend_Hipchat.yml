@@ -1,0 +1,7 @@
+---
+
+errbot_extra_deps:
+  - sleekxmpp
+  - pyasn1
+  - pyasn1-modules
+  - hypchat

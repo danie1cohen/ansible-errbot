@@ -1,0 +1,4 @@
+---
+
+errbot_extra_deps:
+  - python-telegram-bot
