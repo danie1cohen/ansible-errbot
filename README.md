@@ -12,20 +12,20 @@ None
 Role Variables
 --------------
 
-You should define at least these variables, to get your configuration up and
+You should define at least these variables to get your configuration up and
 running.
 
-project: errbot
-errbot_root: /opt/errbot
-errbot_backend: Slack
-errbot_identity_token: xoxb-11625.....etc
-errbot_bot_admins: ('@you',)
-errbot_bot_alt_prefixes: ('@yourbot',)
+    project: errbot
+    errbot_root: /opt/errbot
+    errbot_backend: Slack
+    errbot_identity_token: xoxb-11625.....etc
+    errbot_bot_admins: ('@you',)
+    errbot_bot_alt_prefixes: ('@yourbot',)
 
 Dependencies
 ------------
 
-danie1cohen.virtualenv3
+`danie1cohen.virtualenv3`
 
 Example Playbook
 ----------------
