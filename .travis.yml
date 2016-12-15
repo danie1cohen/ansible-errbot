@@ -18,6 +18,9 @@ install:
   # Check ansible version
   - ansible --version
 
+  # Install dependencies
+  - ansible-galaxy install -r requirements.yml -p ../
+
   # Create ansible.cfg with correct roles_path
   - printf '[defaults]\nroles_path=../' >ansible.cfg
 
