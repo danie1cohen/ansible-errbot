@@ -6,7 +6,6 @@
 
 - name: Check upstart config
   shell: init-checkconf /etc/init/errbot.conf
-  become: yes
 
 - name: Restart errbot
   service: name=errbot state=restarted
