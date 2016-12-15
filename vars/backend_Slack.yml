@@ -3,4 +3,4 @@
 errbot_extra_deps:
   - slackclient==1.0.2
 
-errbot_chatroom_presence: ()
+errbot_chatroom_presence: []

@@ -1,5 +1,5 @@
 ---
-  
+
 errbot_extra_deps:
   - sleekxmpp
   - pyasn1

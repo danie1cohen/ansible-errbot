@@ -5,7 +5,7 @@ description "Errbot daemon"
 start on started networking
 stop on (deconfiguring-networking or runlevel [016])
 
-# respawn
-# respawn limit 5 30
+env LANG='utf-8'
+export LANG
 
 exec {{ errbot_exec }} -c {{ errbot_root }}/config.py

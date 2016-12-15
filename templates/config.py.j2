@@ -59,7 +59,7 @@ BACKEND = '{{ errbot_backend }}'
 
 STORAGE = '{{ errbot_storage }}'
 
-BOT_EXTRA_STORAGE_PLUGINS_DIR = {{ errbot_bot_extra_storage_plugins_dir }}
+BOT_EXTRA_STORAGE_PLUGINS_DIR = {% if errbot_bot_extra_storage_plugins_dir %}'{{ errbot_bot_extra_storage_plugins_dir }}'{% else %}None{% endif %}
 
 # The location where all of Err's data should be stored. Make sure to set
 # this to a directory that is writable by the user running the bot.
@@ -77,14 +77,14 @@ BOT_PLUGIN_INDEXES = '{{ errbot_bot_plugin_indexes }}'
 # locally before publishing it. Note that you can specify only a single
 # directory, however you are free to create subdirectories with multiple
 # plugins inside this directory.
-BOT_EXTRA_PLUGIN_DIR = '{{ errbot_bot_extra_plugin_dir }}'
+BOT_EXTRA_PLUGIN_DIR = {% if errbot_bot_extra_plugin_dir %}'{{ errbot_bot_extra_plugin_dir }}'{% else %}None{% endif %}
 
 # If you use an external backend as a plugin,
 # this is where you tell Errbot where to find it.
 BOT_EXTRA_BACKEND_DIR = '{{ errbot_bot_extra_backend_dir }}'
 
 # If you want only a subset of the core plugins that are bundled with errbot, you can specify them here.
-CORE_PLUGINS = {{ errbot_core_plugins }}
+CORE_PLUGINS = {% if errbot_core_plugins %}'{{ errbot_core_plugins }}'{% else %}None{% endif %}
 # For example CORE_PLUGINS = ('ACLs', 'Backup', 'Help') you get those names from the .plug files Name entry.
 # For absolutely no plug: CORE_PLUGINS = ()
 
@@ -92,7 +92,7 @@ CORE_PLUGINS = {{ errbot_core_plugins }}
 # pre- or post-processing on messages.
 # The 'None' tuple entry represents all the plugins that aren't to be expicitely ordered. For example, if
 # you want 'A' to run first, then everything else but 'B', then 'B', you would use ('A', None, 'B').
-PLUGINS_CALLBACK_ORDER = {{ errbot_plugins_callback_order }}
+PLUGINS_CALLBACK_ORDER = ({% if not errbot_plugins_callback_order %}None, {% else %}{% for plug in errbot_plugins_callback_order %}'{{ plug }}', {% endfor %}{% endif %})
 
 # Should plugin dependencies be installed automatically? If this is true
 # then Errbot will use pip to install any missing dependencies automatically.
@@ -102,7 +102,7 @@ PLUGINS_CALLBACK_ORDER = {{ errbot_plugins_callback_order }}
 # If no virtualenv is detected, the equivalent of `pip install --user -r
 # requirements.txt` is used to ensure the package(s) is/are only installed for
 # the user running Err.
-AUTOINSTALL_DEPS = {{ errbot_autoinstall_deps }}
+AUTOINSTALL_DEPS = {% if errbot_autoinstall_deps %}True{% else %}False{% endif %}
 
 # The location of the log file. If you set this to None, then logging will
 # happen to console only.
@@ -119,14 +119,17 @@ BOT_LOG_LEVEL = {{ errbot_bot_log_level }}
 
 # Enable logging to sentry (find out more about sentry at www.getsentry.com).
 # This is optional and disabled by default.
-BOT_LOG_SENTRY = {{ errbot_bot_log_sentry }}
-SENTRY_DSN = '{{ errbot_sentry_dsn }}'
+
+BOT_LOG_SENTRY = {% if errbot_bot_log_sentry %}True{% else %}False{% endif %}
+
+SENTRY_DSN = {% if errbot_sentry_dsn %}'{{ errbot_sentry_dsn }}'{% else %}''{% endif %}
+
 SENTRY_LOGLEVEL = {{ errbot_sentry_loglevel }}
 
 # Execute commands in asynchronous mode. In this mode, Errbot will spawn 10
 # separate threads to handle commands, instead of blocking on each
 # single command.
-BOT_ASYNC = {{ errbot_bot_async }}
+BOT_ASYNC = {% if errbot_bot_async %}True{% else %}False{% endif %}
 
 # Size of the thread pool for the asynchronous mode.
 BOT_ASYNC_POOLSIZE = {{ errbot_bot_async_poolsize }}
@@ -182,13 +185,13 @@ BOT_IDENTITY = {
 #
 # Unix-style glob patterns are supported, so 'gbin@localhost'
 # would be considered an admin if setting '*@localhost'.
-BOT_ADMINS = {{ errbot_bot_admins }}
+BOT_ADMINS = ({% for admin in errbot_bot_admins %}'{{ admin }}',{% endfor %})
 
 # Chatrooms your bot should join on startup. For the IRC backend you
 # should include the # sign here. For XMPP rooms that are password
 # protected, you can specify another tuple here instead of a string,
 # using the format (RoomName, Password).
-CHATROOM_PRESENCE = {{ errbot_chatroom_presence }}
+CHATROOM_PRESENCE = ({% for pres in errbot_chatroom_presence %}'{{ pres }}', {% endfor %})
 
 # The FullName, or nickname, your bot should use. What you set here will
 # be the nickname that Errbot shows in chatrooms. Note that some XMPP
@@ -213,13 +216,13 @@ BOT_PREFIX = '{{ errbot_bot_prefix }}'
 # Uncomment the following and set it to True if you want the prefix to be
 # optional for normal chat.
 # (Meaning messages sent directly to the bot as opposed to within a MUC)
-BOT_PREFIX_OPTIONAL_ON_CHAT = {{ errbot_bot_prefix_optional_on_chat }}
+BOT_PREFIX_OPTIONAL_ON_CHAT = {% if errbot_bot_prefix_optional_on_chat %}True{% else %}False{% endif %}
 
 # You might wish to have your bot respond by being called with certain
 # names, rather than the BOT_PREFIX above. This option allows you to
 # specify alternative prefixes the bot will respond to in addition to
 # the prefix above.
-BOT_ALT_PREFIXES = {{ errbot_bot_alt_prefixes }}
+BOT_ALT_PREFIXES = ({% for pref in errbot_bot_alt_prefixes %}'{{ pref }}', {% endfor %})
 
 # If you use alternative prefixes, you might want to allow users to insert
 # separators like , and ; between the prefix and the command itself. This
@@ -229,12 +232,12 @@ BOT_ALT_PREFIXES = {{ errbot_bot_alt_prefixes }}
 #
 # Note: There's no need to add spaces to the separators here
 #
-BOT_ALT_PREFIX_SEPARATORS = {{ errbot_bot_alt_prefix_separators }}
+BOT_ALT_PREFIX_SEPARATORS = ({% for sep in errbot_bot_alt_prefix_separators %}'{{ sep }}', {% endfor %})
 
 # Continuing on this theme, you might want to permit your users to be
 # lazy and not require correct capitalization, so they can do 'Err',
 # 'err' or even 'ERR'.
-BOT_ALT_PREFIX_CASEINSENSITIVE = {{ errbot_bot_alt_prefix_caseinsensitive }}
+BOT_ALT_PREFIX_CASEINSENSITIVE = {% if errbot_bot_alt_prefix_caseinsensitive %}True{% else %}False{% endif %}
 
 ##########################################################################
 # Access controls and message diversion                                  #
@@ -266,35 +269,35 @@ BOT_ALT_PREFIX_CASEINSENSITIVE = {{ errbot_bot_alt_prefix_caseinsensitive }}
 #
 # Example:
 #
-ACCESS_CONTROLS_DEFAULT = {{ errbot_access_controls_default }}
-ACCESS_CONTROLS = {{ errbot_access_controls }}
+ACCESS_CONTROLS_DEFAULT = {{ errbot_access_controls_default | to_json }}
+ACCESS_CONTROLS = {{ errbot_access_controls | to_json }}
 
 
 # Uncomment and set this to True to hide the restricted commands from
 # the help output.
-HIDE_RESTRICTED_COMMANDS = {{ errbot_hide_restricted_commands }}
+HIDE_RESTRICTED_COMMANDS = {% if errbot_hide_restricted_commands %}True{% else %}False{% endif %}
 
 # Uncomment and set this to True to ignore commands from users that have no
 # access for these instead of replying with error message.
-HIDE_RESTRICTED_ACCESS = {{ errbot_hide_restricted_access }}
+HIDE_RESTRICTED_ACCESS = {% if errbot_hide_restricted_access %}True{% else %}False{% endif %}
 
 # A list of commands which should be responded to in private, even if
 # the command was given in a MUC. For example:
 # DIVERT_TO_PRIVATE = ('help', 'about', 'status')
-DIVERT_TO_PRIVATE = {{ errbot_divert_to_private }}
+DIVERT_TO_PRIVATE = ({% for cmd in errbot_divert_to_private %}'{{ cmd }}', {% endfor %})
 
 # Chat relay
 # Can be used to relay one to one message from specific users to the bot
 # to MUCs. This can be useful with XMPP notifiers like for example  the
 # standard Altassian Jira which don't have native support for MUC.
 # For example: CHATROOM_RELAY = {'gbin@localhost' : (_TEST_ROOM,)}
-CHATROOM_RELAY = {{ errbot_chatroom_relay }}
+CHATROOM_RELAY = {{ errbot_chatroom_relay | to_json }}
 
 # Reverse chat relay
 # This feature forwards whatever is said to a specific user.
 # It can be useful if you client like gtalk doesn't support MUC correctly
 # For example: REVERSE_CHATROOM_RELAY = {_TEST_ROOM : ('gbin@localhost',)}
-REVERSE_CHATROOM_RELAY = {{ errbot_reverse_chatroom_relay }}
+REVERSE_CHATROOM_RELAY = {{ errbot_reverse_chatroom_relay | to_json }}
 
 ##########################################################################
 # Miscellaneous configuration options                                    #
@@ -319,9 +322,8 @@ XMPP_CA_CERT_FILE = '{{ errbot_xmpp_ca_cert_file }}'
 # some buggy XMPP servers.
 #
 # The default is to try anything:
-XMPP_FEATURE_MECHANISMS = {{ errbot_xmpp_feature_mechanisms }}
-# To use only unencrypted plain auth:
-XMPP_FEATURE_MECHANISMS = {{ errbot_xmpp_feature_mechanisms }}
+XMPP_FEATURE_MECHANISMS = {{ errbot_xmpp_feature_mechanisms | to_json }}
+
 
 # Modify the default keep-alive interval. By default, Errbot will send
 # some whitespace to the XMPP server every 300 seconds to keep the TCP
@@ -340,7 +342,7 @@ XMPP_KEEPALIVE_INTERVAL = {{ errbot_xmpp_keepalive_interval }}
 # XMPP supports some formatting with XEP-0071 (http://www.xmpp.org/extensions/xep-0071.html).
 # It is disabled by default because XMPP clients support has been found to be spotty.
 # Switch it to True to enable XHTML-IM formatting.
-XMPP_XHTML_IM = {{ errbot_xmpp_xhtml_im }}
+XMPP_XHTML_IM = {% if errbot_xmpp_xhtml_im %}True{% else %}False{% endif %}
 
 # Message rate limiting for the IRC backend. This will delay subsequent
 # messages by this many seconds (floats are supported). Setting these
@@ -360,13 +362,13 @@ IRC_RECONNECT_ON_DISCONNECT = {{ errbot_irc_reconnect_on_disconnect }}
 IRC_ACL_PATTERN = '{{ errbot_irc_acl_pattern }}'
 
 # Allow messages sent in a chatroom to be directed at requester.
-GROUPCHAT_NICK_PREFIXED = {{ errbot_groupchat_nick_prefixed }}
+GROUPCHAT_NICK_PREFIXED = {% if errbot_groupchat_nick_prefixed %}True{% else %}False{% endif %}
 
 # Disable table borders, making output more compact (supported only on IRC, Slack and Telegram currently).
-COMPACT_OUTPUT = {{ errbot_compact_output }}
+COMPACT_OUTPUT = {% if errbot_compact_output %}True{% else %}False{% endif %}
 
 # Disables the logging output in Text mode and only outputs Ansi.
-TEXT_DEMO_MODE = {{ errbot_text_demo_mode }}
+TEXT_DEMO_MODE = {% if errbot_text_demo_mode %}True{% else %}False{% endif %}
 
 # Prevent ErrBot from saying anything if the command is unrecognized.
-SUPPRESS_CMD_NOT_FOUND = {{ errbot_suppress_cmd_not_found }}
+SUPPRESS_CMD_NOT_FOUND = {% if errbot_suppress_cmd_not_found %}True{% else %}False{% endif %}

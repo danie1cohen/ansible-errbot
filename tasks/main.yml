@@ -14,7 +14,7 @@
          creates={{ errbot_root }}/config.py
 
 - include_vars: backend_{{ errbot_backend }}.yml
-  ignore_errors: yes
+  when: errbot_backend in ('Hipchat', 'IRC', 'Slack', 'Telegram', 'XMPP')
 
 - name: install extra dependencies
   pip: name={{ item }} state=present executable={{ virtualenv_pip }}

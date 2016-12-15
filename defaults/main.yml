@@ -1,10 +1,10 @@
 ---
 # defaults file for errbot
 
-workon_home: /opt/envs/
+workon_home: /opt/envs
 project: errbot
 
-errbot_root: /opt/errbot/
+errbot_root: /opt/errbot
 errbot_user: "{{ ansible_ssh_user }}"
 errbot_exec: "{{ virtualenv }}/bin/errbot"
 errbot_extra_deps: []
@@ -30,7 +30,7 @@ errbot_backend: XMPP
 
 errbot_storage: Shelf  # defaults to filestorage (python shelf).
 
-errbot_bot_extra_storage_plugins_dir: None  # extra search path to find custom storage plugins
+errbot_bot_extra_storage_plugins_dir: no  # extra search path to find custom storage plugins
 
 # The location where all of Err's data should be stored. Make sure to set
 # this to a directory that is writable by the user running the bot.
@@ -53,7 +53,7 @@ errbot_bot_plugin_indexes: http://version.errbot.io/repos.json
 # locally before publishing it. Note that you can specify only a single
 # directory, however you are free to create subdirectories with multiple
 # plugins inside this directory.
-errbot_bot_extra_plugin_dir: "None"
+errbot_bot_extra_plugin_dir: no
 
 # If you use an external backend as a plugin,
 # this is where you tell Errbot where to find it.
@@ -65,7 +65,7 @@ errbot_directories:
   - "{{ errbot_bot_extra_backend_dir }}"
 
 # If you want only a subset of the core plugins that are bundled with errbot, you can specify them here.
-errbot_core_plugins: None # This is default, all core plugins.
+errbot_core_plugins: no # This is default, all core plugins.
 # For example CORE_PLUGINS = ('ACLs', 'Backup', 'Help') you get those names from the .plug files Name entry.
 # For absolutely no plug: CORE_PLUGINS = ()
 
@@ -73,7 +73,7 @@ errbot_core_plugins: None # This is default, all core plugins.
 # pre- or post-processing on messages.
 # The 'None' tuple entry represents all the plugins that aren't to be expicitely ordered. For example, if
 # you want 'A' to run first, then everything else but 'B', then 'B', you would use ('A', None, 'B').
-errbot_plugins_callback_order: "(None, )"
+errbot_plugins_callback_order: []
 
 # Should plugin dependencies be installed automatically? If this is true
 # then Errbot will use pip to install any missing dependencies automatically.
@@ -83,7 +83,7 @@ errbot_plugins_callback_order: "(None, )"
 # If no virtualenv is detected, the equivalent of `pip install --user -r
 # requirements.txt` is used to ensure the package(s) is/are only installed for
 # the user running Err.
-errbot_autoinstall_deps: True
+errbot_autoinstall_deps: yes
 
 # The location of the log file. If you set this to None, then logging will
 # happen to console only.
@@ -100,14 +100,14 @@ errbot_bot_log_level: logging.INFO
 
 # Enable logging to sentry (find out more about sentry at www.getsentry.com).
 # This is optional and disabled by default.
-errbot_bot_log_sentry: False
-errbot_sentry_dsn: ""
+errbot_bot_log_sentry: no
+errbot_sentry_dsn: no
 errbot_sentry_loglevel: BOT_LOG_LEVEL
 
 # Execute commands in asynchronous mode. In this mode, Errbot will spawn 10
 # separate threads to handle commands, instead of blocking on each
 # single command.
-errbot_bot_async: True
+errbot_bot_async: yes
 
 # Size of the thread pool for the asynchronous mode.
 errbot_bot_async_poolsize: 10
@@ -140,13 +140,15 @@ errbot_identity_bind_address: "(localhost', 0)"
 #
 # Unix-style glob patterns are supported, so 'gbin@localhost'
 # would be considered an admin if setting '*@localhost'.
-errbot_bot_admins: ('{{ ansible_ssh_user }}@localhost',)
+errbot_bot_admins:
+  - "{{ ansible_ssh_user }}@localhost"
 
 # Chatrooms your bot should join on startup. For the IRC backend you
 # should include the # sign here. For XMPP rooms that are password
 # protected, you can specify another tuple here instead of a string,
 # using the format (RoomName, Password).
-errbot_chatroom_presence: () # "('err@conference.server.tld',)"
+errbot_chatroom_presence:
+  - err@conference.server.tld
 
 # The FullName, or nickname, your bot should use. What you set here will
 # be the nickname that Errbot shows in chatrooms. Note that some XMPP
@@ -171,13 +173,14 @@ errbot_bot_prefix: "!"
 # Uncomment the following and set it to True if you want the prefix to be
 # optional for normal chat.
 # (Meaning messages sent directly to the bot as opposed to within a MUC)
-errbot_bot_prefix_optional_on_chat: False
+errbot_bot_prefix_optional_on_chat: no
 
 # You might wish to have your bot respond by being called with certain
 # names, rather than the BOT_PREFIX above. This option allows you to
 # specify alternative prefixes the bot will respond to in addition to
 # the prefix above.
-errbot_bot_alt_prefixes: () #('Err',)
+errbot_bot_alt_prefixes:
+  - Err
 
 # If you use alternative prefixes, you might want to allow users to insert
 # separators like , and ; between the prefix and the command itself. This
@@ -187,12 +190,15 @@ errbot_bot_alt_prefixes: () #('Err',)
 #
 # Note: There's no need to add spaces to the separators here
 #
-errbot_bot_alt_prefix_separators: (':', ',', ';')
+errbot_bot_alt_prefix_separators:
+  - ':'
+  - ','
+  - ';'
 
 # Continuing on this theme, you might want to permit your users to be
 # lazy and not require correct capitalization, so they can do 'Err',
 # 'err' or even 'ERR'.
-errbot_bot_alt_prefix_caseinsensitive: True
+errbot_bot_alt_prefix_caseinsensitive: yes
 
 ##########################################################################
 # Access controls and message diversion                                  #
@@ -224,34 +230,34 @@ errbot_bot_alt_prefix_caseinsensitive: True
 #
 # Example:
 #
-errbot_access_controls_default: "{}" # Allow everyone access by default
-errbot_access_controls: "{}"
+errbot_access_controls_default: {} # Allow everyone access by default
+errbot_access_controls: {}
 
 # Uncomment and set this to True to hide the restricted commands from
 # the help output.
-errbot_hide_restricted_commands: False
+errbot_hide_restricted_commands: no
 
 # Uncomment and set this to True to ignore commands from users that have no
 # access for these instead of replying with error message.
-errbot_hide_restricted_access: False
+errbot_hide_restricted_access: no
 
 # A list of commands which should be responded to in private, even if
 # the command was given in a MUC. For example:
 # DIVERT_TO_PRIVATE = ('help', 'about', 'status')
-errbot_divert_to_private: "()"
+errbot_divert_to_private: []
 
 # Chat relay
 # Can be used to relay one to one message from specific users to the bot
 # to MUCs. This can be useful with XMPP notifiers like for example  the
 # standard Altassian Jira which don't have native support for MUC.
 # For example: CHATROOM_RELAY = {'gbin@localhost' : (_TEST_ROOM,)}
-errbot_chatroom_relay: "{}"
+errbot_chatroom_relay: {}
 
 # Reverse chat relay
 # This feature forwards whatever is said to a specific user.
 # It can be useful if you client like gtalk doesn't support MUC correctly
 # For example: REVERSE_CHATROOM_RELAY = {_TEST_ROOM : ('gbin@localhost',)}
-errbot_reverse_chatroom_relay: "{}"
+errbot_reverse_chatroom_relay: {}
 
 ##########################################################################
 # Miscellaneous configuration options                                    #
@@ -276,7 +282,7 @@ errbot_xmpp_ca_cert_file: /etc/ssl/certs/ca-certificates.crt
 # some buggy XMPP servers.
 #
 # The default is to try anything:
-errbot_xmpp_feature_mechanisms: "{}"
+errbot_xmpp_feature_mechanisms: {}
 
 # Modify the default keep-alive interval. By default, Errbot will send
 # some whitespace to the XMPP server every 300 seconds to keep the TCP
@@ -295,7 +301,7 @@ errbot_xmpp_keepalive_interval: 300
 # XMPP supports some formatting with XEP-0071 (http://www.xmpp.org/extensions/xep-0071.html).
 # It is disabled by default because XMPP clients support has been found to be spotty.
 # Switch it to True to enable XHTML-IM formatting.
-errbot_xmpp_xhtml_im: False
+errbot_xmpp_xhtml_im: no
 
 # Message rate limiting for the IRC backend. This will delay subsequent
 # messages by this many seconds (floats are supported). Setting these
@@ -317,13 +323,13 @@ errbot_irc_reconnect_on_disconnect: 5  # Reconnect back to a channel after a dis
 errbot_irc_acl_pattern: "{nick}!{user}@{host}"
 
 # Allow messages sent in a chatroom to be directed at requester.
-errbot_groupchat_nick_prefixed: False
+errbot_groupchat_nick_prefixed: no
 
 # Disable table borders, making output more compact (supported only on IRC, Slack and Telegram currently).
-errbot_compact_output: True
+errbot_compact_output: yes
 
 # Disables the logging output in Text mode and only outputs Ansi.
-errbot_text_demo_mode: False
+errbot_text_demo_mode: no
 
 # Prevent ErrBot from saying anything if the command is unrecognized.
-errbot_suppress_cmd_not_found: False
+errbot_suppress_cmd_not_found: no

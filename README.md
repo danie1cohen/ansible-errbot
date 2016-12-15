@@ -17,12 +17,20 @@ Role Variables
 You should define at least these variables to get your configuration up and
 running.
 
-    project: errbot
-    errbot_root: /opt/errbot
     errbot_backend: Slack
     errbot_identity_token: xoxb-11625.....etc
-    errbot_bot_admins: ('@you',)
-    errbot_bot_alt_prefixes: ('@yourbot',)
+    errbot_bot_admins:
+      - "@you"
+    errbot_bot_alt_prefixes:
+      - "@yourbot"
+
+
+Errbot defines its configuration in a pure python file: config.py.  That can
+make defining variables via ansible a little tricky.  In cases where a string
+is always expected, the variable is already surrounded in quotes for you. You
+can define your strings in yaml normally.  In some cases, the config variable
+is usually a python object, and if you want to pass it a string you must
+quote it yourself.
 
 Dependencies
 ------------
