@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/danie1cohen/ansible-errbot.svg?branch=master)](https://travis-ci.org/danie1cohen/ansible-errbot)
+
 Errbot
 =========
 
