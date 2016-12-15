@@ -5,7 +5,7 @@
   shell: "{{ virtualenv }}/bin/python -m py_compile {{ errbot_root }}/config.py"
 
 - name: Check upstart config
-  shell: init-checkconf /etc/init/errbot.conf
+  shell: /usr/bin/init-checkconf /etc/init/errbot.conf
 
 - name: Restart errbot
   service: name=errbot state=restarted
