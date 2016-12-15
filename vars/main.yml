@@ -1,2 +1,6 @@
 ---
 # vars file for errbot
+
+project: errbot
+workon_home: /opt/envs/
+errbot_root: /opt/errbot/
