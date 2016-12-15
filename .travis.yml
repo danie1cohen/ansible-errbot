@@ -29,7 +29,7 @@ script:
   - ansible-playbook tests/test.yml -i tests/inventory --syntax-check
 
   # Run the role/playbook with ansible-playbook.
-  - ansible-playbook tests/test.yml -i tests/inventory --connection=local
+  - ansible-playbook tests/test.yml -i tests/inventory --connection=local --sudo
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
