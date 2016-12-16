@@ -32,5 +32,5 @@
   template: src=templates/upstart.conf.j2 dest=/etc/init/errbot.conf
   become: yes
   notify:
-    - Check upstart config
+    #- Check upstart config
     - Restart errbot
