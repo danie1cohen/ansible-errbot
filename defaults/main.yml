@@ -1,7 +1,6 @@
 ---
 # defaults file for errbot
 
-workon_home: /opt/envs
 project: errbot
 
 errbot_root: /opt/errbot
