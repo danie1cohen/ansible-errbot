@@ -5,7 +5,7 @@ workon_home: /opt/envs
 project: errbot
 
 errbot_root: /opt/errbot
-errbot_user: "{{ ansible_ssh_user }}"
+errbot_user: "{{ ansible_user_id }}"
 errbot_exec: "{{ virtualenv }}/bin/errbot"
 errbot_extra_deps: []
 
@@ -141,7 +141,7 @@ errbot_identity_bind_address: "(localhost', 0)"
 # Unix-style glob patterns are supported, so 'gbin@localhost'
 # would be considered an admin if setting '*@localhost'.
 errbot_bot_admins:
-  - "{{ ansible_ssh_user }}@localhost"
+  - "{{ ansible_user_id }}@localhost"
 
 # Chatrooms your bot should join on startup. For the IRC backend you
 # should include the # sign here. For XMPP rooms that are password
