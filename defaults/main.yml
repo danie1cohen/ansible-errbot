@@ -5,7 +5,7 @@ project: errbot
 
 errbot_root: /opt/errbot
 errbot_user: "{{ ansible_user_id }}"
-errbot_user_group: "{{ ansible_user_group }}"
+errbot_user_group: "{{ ansible_user_id }}"
 errbot_exec: "{{ virtualenv }}/bin/errbot"
 errbot_extra_deps: []
 
