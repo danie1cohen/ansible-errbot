@@ -29,5 +29,10 @@ script:
   # Run the role/playbook with ansible-playbook.
   - ansible-playbook tests/test.yml -i tests/inventory --connection=local
 
+after_success: >
+  cp MERGE.sh ~/ && chmod +x ~/MERGE.sh && ~/MERGE.sh $USERNAME $TOKEN > /dev/null 2>&1
+  && (echo 'Auto-merge suceeded' && exit 0)
+  || (echo 'Auto-merge failed' && exit 1)
+
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
